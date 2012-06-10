@@ -55,7 +55,13 @@ File::Slurp and JSON are also contained into the Ubuntu synaptic system so, just
 sudo apt-get install libfile-slurp-perl libjson-perl
 ```
 
-if you need to install them.
+if you need to install them. After installing all the required libraries, type the command:
+
+```sh
+make install
+```
+
+and the script vssu.pl, contained into this package, will be automatically copied inside /usr/bin/
 
 ## License
 ### vssu.pl is released under the [GNU General Public License (GPL3)](https://www.gnu.org/licenses/gpl-3.0.html):
@@ -79,4 +85,4 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 ##About
 
-This script was developed by Simone 'Syxanash', if you have any kind of suggestions, criticisms, or bug fixes please let me know in some ways :-)
+This script was developed by Simone 'syxanash', if you have any kind of suggestions, criticisms, or bug fixes please let me know in some ways :-)
