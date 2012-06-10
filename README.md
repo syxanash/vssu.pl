@@ -61,7 +61,7 @@ if you need to install them. After installing all the required libraries, type t
 make install
 ```
 
-and the script vssu.pl, contained into this package, will be automatically copied inside /usr/bin/
+and the script vssu.pl, contained into this package, will be automatically copied into /usr/bin/
 
 ## License
 ### vssu.pl is released under the [GNU General Public License (GPL3)](https://www.gnu.org/licenses/gpl-3.0.html):
