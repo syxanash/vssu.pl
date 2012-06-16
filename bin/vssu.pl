@@ -11,7 +11,7 @@ use Getopt::Long;
 use Pod::Usage;
 use version;
 
-our $VERSION = qv('0.1.0');
+our $VERSION = qv('0.1.1');
 
 my $api_key = 'YOUR API KEY HERE'; # insert here your API key
 
@@ -88,12 +88,12 @@ if ( $actions{apikey} ) {
 # set the delay selected by the user
 
 if ( $actions{delay} ) {
-    chomp( $screen_delay = `zenity --entry --title="Add a delay" --text="capture the screen after (seconds):" --entry-text "4"` );
+    chomp( $screen_delay = `zenity --scale --title="Screenshot delay" --text="Set a delay before taking the screenshot" --min-value=0 --max-value=99 --value=4` );
 
-    unless ( is_number($screen_delay) && $screen_delay ne q{} ) {
-        system 'zenity --error --text="Enter a valid number for the screen capture delay!"';
-        die "[!] Enter a valid number for the seconds value!\n";
-    }
+    if ( $screen_delay eq q{} ) {
+        system 'zenity --error --text="No value selected!"';
+        die "[!] No value selected for the delay!\n";
+    }   
 }
 
 system( "scrot -s -d $screen_delay " . $temporary_path . $filename ) == 0
