@@ -129,14 +129,6 @@ else {
     die "[!] Error establishing the connection!\n";
 }
 
-sub is_number {
-    my $number = shift;
-
-    $number =~ m{^\d*$}ix
-      ? return 1
-      : return 0;
-}
-
 sub uploading_picture {
     my $picture = shift;
 
