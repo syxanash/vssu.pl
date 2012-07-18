@@ -183,13 +183,11 @@ sub check_env_path {
         }
     }
 
-    if ( $check_flag{zenity} == 0 ) {
-        print '[!] Please install ', $binaries{zenity}, ' first!', "\n";
-    }
+    print '[!] Please install ', $binaries{zenity}, ' first!', "\n"
+        unless ( $check_flag{zenity} );
 
-    if ( $check_flag{scrot} == 0 ) {
-        print '[!] Please install ', $binaries{scrot}, ' first!', "\n";
-    }
+    print '[!] Please install ', $binaries{scrot}, ' first!', "\n"
+        unless ( $check_flag{scrot} );
 
     return $value_to_return;
 }
