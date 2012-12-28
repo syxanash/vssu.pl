@@ -3,15 +3,15 @@
 use strict;
 use warnings;
 
-use MIME::Base64;
-use File::Slurp;
 use LWP::UserAgent;
-use JSON;
+use XML::Simple;
+use HTTP::Request::Common;
 use Getopt::Long;
 use Pod::Usage;
 use version;
+use Data::Dumper;
 
-our $VERSION = qv('0.1.1');
+our $VERSION = qv('0.1.4');
 
 my $api_key = 'YOUR API KEY HERE'; # insert here your API key
 
@@ -22,13 +22,12 @@ my $screen_delay = 0;
 
 my $response;
 
-my $picture_encoded;
-
 my %actions = (
-    apikey => '',
-    delay  => '',
-    save   => '',
-    help   => '',
+    apikey   => '',
+    delay    => '',
+    response => '',
+    save     => '',
+    help     => '',
 );
 
 # check if all the tools have been installed into the system
@@ -44,9 +43,14 @@ if ( $ENV{"PATH"} ne q{} ) {
 GetOptions(
     'apikey=s' => \$actions{apikey},
     'delay'    => \$actions{delay},
+    'response' => \$actions{response},
     'save'     => \$actions{save},
     'help'     => \$actions{help},
 );
+
+if ( $actions{help} ) {
+    pod2usage(1);
+}
 
 # check if the user need to save the picture
 # in a specific path
@@ -75,10 +79,6 @@ if ( $actions{save} ) {
 mkdir '/tmp/deshare'
   unless ( -d $temporary_path );
 
-if ( $actions{help} ) {
-    pod2usage(1);
-}
-
 # check if the user selected a different API key
 
 if ( $actions{apikey} ) {
@@ -99,30 +99,21 @@ if ( $actions{delay} ) {
 system( "scrot -s -d $screen_delay " . $temporary_path . $filename ) == 0
   or die '[?] The capture was halted!', "\n";
 
-$picture_encoded = encode_base64( read_file( $temporary_path . $filename ) );
+$response = uploading_picture($temporary_path . $filename);
 
-$response = uploading_picture($picture_encoded);
-
-# after uploading the picture to imgur.com, check if the connection
+# after uploading the picture to imageshack.com, check if the connection
 # was correctly established, if true send the URL in a msgbox
 
 if ( $response->is_success ) {
     my $web_content = $response->content;
+    my $hash_decoded = XMLin($web_content);
 
-    my $json_hash_decoded = decode_json($web_content);
+    print Dumper( $hash_decoded ), "\n", '=' x 30, "\n"
+      if ( $actions{response} );
 
-    system( 'zenity --info --title="Here\'s your URL" --text="Original link: '
-          . $json_hash_decoded->{upload}{links}{original}
-          . '\nImgur page: '
-          . $json_hash_decoded->{upload}{links}{imgur_page}
-          . '\nDelete page: '
-          . $json_hash_decoded->{upload}{links}{delete_page}
-          . '"' );
+    system( 'zenity --info --title="Here\'s your URL" --text="' . $hash_decoded->{links}{image_link} . '"' );
 
-    print "\n",
-      'Original Link: ', $json_hash_decoded->{upload}{links}{original},   "\n",
-      'Imgur page: ',    $json_hash_decoded->{upload}{links}{imgur_page}, "\n",
-      'Delete page: ', $json_hash_decoded->{upload}{links}{delete_page}, "\n\n";
+    print "\n", $hash_decoded->{links}{image_link},   "\n\n";
 }
 else {
     system 'zenity --error --text="Can\'t establish the connection!"';
@@ -137,16 +128,17 @@ sub uploading_picture {
 
     # sending a notification on the desktop
 
-    system 'zenity --notification --window-icon="info" --text="Uploading the screenshot to imgur.com ..." &';
-    print '[?] Uploading the screenshot to imgur.com ...', "\n";
+    system 'zenity --notification --window-icon="info" --text="Uploading the screenshot to imageshack.com ..." &';
+    print '[?] Uploading the screenshot to imageshack.com ...', "\n";
 
     $lwp_useragent = LWP::UserAgent->new();
 
-    $lwp_response = $lwp_useragent->post(
-        'http://api.imgur.com/2/upload.json',
-        [
-            key   => $api_key,
-            image => $picture,
+    $lwp_response = $lwp_useragent->request(POST 'http://www.imageshack.us/upload_api.php',
+        Content_Type => 'form-data',
+        Content => [
+            key        => $api_key,
+            public     => 'no',
+            fileupload => [$picture]
         ]
     );
 
@@ -209,39 +201,40 @@ perl vssu.pl [--options] <parameters>
   --save                    Allows the user to save the screenshot into a specific path
  
  Other Options:
+  --response                Shows the whole XML response under Data::Dumper format
   --apikey=NEW_API_KEY      Allows the user to use a different API key
   --help                    Show this very useful help!
 
 =head1 DESCRIPTION
 
 vssu.pl allows you to make a screenshot of your system
-and upload it automatically on imgur.com using their API service.
-This script uses also zenity for getting various data from the
-user. It requires also the tool scrot in order to catch
+and upload it automatically on imageshack.com using their API service.
+This script uses also zenity as graphic user interface.
+It requires also the tool scrot in order to catch
 the screenshot of your system.
 If you're on Ubuntu or Debian-like distro, simply type the
 following command into the command line:
 
   sudo apt-get install scrot zenity libfile-slurp-perl
 
-Remember that you can also specify your own API key of imgur.com
+Remember that you can also specify your own API key of imageshack.com
 simply by passing it as an ARGV parameter to --apikey.
 
 =head1 DEPENDENCIES
 
-Getopt::Long ~ http://search.cpan.org/~enrys/POD2-IT-Getopt-Long/lib/POD2/IT/Getopt/Long.pm
-
-MIME::Base64 ~ http://search.cpan.org/~gaas/MIME-Base64-3.13/Base64.pm
-
-File::Slurp ~ http://search.cpan.org/~uri/File-Slurp-9999.19/lib/File/Slurp.pm
-
 LWP::UserAgent ~ http://search.cpan.org/~gaas/libwww-perl-6.04/lib/LWP/UserAgent.pm
 
-JSON ~ http://search.cpan.org/~makamaka/JSON-2.53/lib/JSON.pm
+XML::Simple ~ http://search.cpan.org/~grantm/XML-Simple-2.20/lib/XML/Simple.pm
+
+HTTP::Request::Common ~ http://search.cpan.org/~gaas/HTTP-Message-6.06/lib/HTTP/Request/Common.pm
+
+Getopt::Long ~ http://search.cpan.org/~enrys/POD2-IT-Getopt-Long/lib/POD2/IT/Getopt/Long.pm
 
 version ~ http://search.cpan.org/~jpeacock/version-0.99/lib/version.pod
 
 Pod::Usage ~ http://perldoc.perl.org/Pod/Usage.html
+
+Data::Dumper ~ http://search.cpan.org/~smueller/Data-Dumper-2.139/Dumper.pm
 
 =head1 SEE ALSO
 
