@@ -1,7 +1,7 @@
 ## vssu.pl
 ### a very simple screenshot uploader dot pl
 
-vssu.pl allows you to make screenshots of your system and upload them automatically on imgur.com.
+vssu.pl allows you to make screenshots of your system and upload them automatically on imageshack.com.
 
 ##Synopsis
 
@@ -13,6 +13,7 @@ Capture Options:
   --save                    Allows the user to save the screenshot into a specific path
  
 Other Options:
+ --response                Shows the whole XML response under Data::Dumper format
  --apikey=NEW_API_KEY      Allows the user to use a different API key
  --help                    Show this very useful help!
 ```
@@ -20,16 +21,16 @@ Other Options:
 ##Description
 
 vssu.pl allows you to make a screenshot of your system
-and upload it automatically on imgur.com using their API service.
+and upload it automatically on imageshack.com using their API service.
 This script uses also zenity for getting various data from the
 user. It requires also the tool scrot in order to catch
 the screenshot of your system.
-Remember that you can also specify your own API key of imgur.com
+Remember that you can also specify your own API key of imageshack.com
 simply by passing it as an ARGV parameter to --apikey.
 
 ##Installation
 
-This script obviously requires the tools scrot and zenity, which can be
+This script obviously requires the tools **scrot** and **zenity**, which can be
 easily installed (if you're on a Debian-like distro), by the following command:
 
 ```sh
@@ -41,21 +42,15 @@ be listed into the relative package manager.
 
 You also need various Perl modules to make this script work, here's the list:
 
-* [MIME::Base64](http://search.cpan.org/~enrys/POD2-IT-Getopt-Long/lib/POD2/IT/Getopt/Long.pm) -- (already installed)
-* [File::Slurp](http://search.cpan.org/~uri/File-Slurp-9999.19/lib/File/Slurp.pm) -- (installation required)
 * [LWP::UserAgent](http://search.cpan.org/~gaas/libwww-perl-6.04/lib/LWP/UserAgent.pm) -- (already installed)
-* [JSON](http://search.cpan.org/~makamaka/JSON-2.53/lib/JSON.pm) -- (probably installation required)
+* [HTTP::Request::Common](http://search.cpan.org/~gaas/HTTP-Message-6.06/lib/HTTP/Request/Common.pm) -- (already installed)
+* [XML::Simple](http://search.cpan.org/~grantm/XML-Simple-2.20/lib/XML/Simple.pm) -- (probably installation required)
 * [Getopt::Long](http://search.cpan.org/~enrys/POD2-IT-Getopt-Long/lib/POD2/IT/Getopt/Long.pm) -- (probably installation required)
 * [Pod::Usage](http://perldoc.perl.org/Pod/Usage.html) -- (already installed)
 * [version](http://search.cpan.org/~jpeacock/version-0.99/lib/version.pod) -- (already installed)
+* [Data::Dumper](http://search.cpan.org/~smueller/Data-Dumper-2.139/Dumper.pm) -- (don't remember, probably installation required)
 
-File::Slurp and JSON are also contained into the Ubuntu synaptic system so, just type the command:
-
-```sh
-sudo apt-get install libfile-slurp-perl libjson-perl
-```
-
-if you need to install them. After installing all the required libraries, type the command:
+After installing all the required libraries, type the command:
 
 ```sh
 make install
