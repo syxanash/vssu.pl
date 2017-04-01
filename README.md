@@ -3,7 +3,7 @@
 
 vssu.pl allows you to make screenshots of your system and upload them automatically on imageshack.com.
 
-##Synopsis
+## Synopsis
 
 ```
 perl vssu.pl [--options] <parameters>
@@ -18,7 +18,7 @@ Other Options:
  --help                    Show this very useful help!
 ```
 
-##Description
+## Description
 
 vssu.pl allows you to make a screenshot of your system
 and upload it automatically on imageshack.com using their API service.
@@ -28,7 +28,7 @@ the screenshot of your system.
 Remember that you can also specify your own API key of imageshack.com
 simply by passing it as an ARGV parameter to --apikey.
 
-##Installation
+## Installation
 
 This script obviously requires the tools **scrot** and **zenity**, which can be
 easily installed (if you're on a Debian-like distro), by the following command:
@@ -59,25 +59,27 @@ make install
 and the script vssu.pl, contained into this package, will be automatically copied into /usr/bin/
 
 ## License
-### vssu.pl is released under the [GNU General Public License (GPL3)](https://www.gnu.org/licenses/gpl-3.0.html):
-Copyright (C) 2012 syxanash <syxanash@gmail.com>
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or (at
-your option) any later version.
+Copyright (c) 2015 Simone Marzulli
 
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-General Public License for more details.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-On Debian systems, the complete text of the GNU General Public License
-can be found in /usr/share/common-licenses/GPL-3.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 
-##About
+## About
 
 This script was developed by Simone 'syxanash', if you have any kind of suggestions, criticisms, or bug fixes please let me know in some ways :-)
